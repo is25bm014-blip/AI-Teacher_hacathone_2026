@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Teacher Studio</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <div class="eyebrow">
+                AI INNOVATION HACKATHON 2026
+            </div>
+
+            <h1>
+                AI Teacher
+                <span>Studio</span>
+            </h1>
+
+            <p>
+                Understand → Plan → Explain →
+                Practice → Evaluate → Adapt
+            </p>
+
+        </div>
+
+        <div id="serverStatus"
+             class="status">
+
+            🟡 Connecting...
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         01. LEARNER PROFILE
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="sectionNumber">
+            01
+        </div>
+
+        <h2>
+            👨‍🎓 Create Learner Profile
+        </h2>
+
+        <p>
+            Tell the AI teacher about the learner.
+            The teaching method will automatically adapt.
+        </p>
+
+        <div class="grid">
+
+            <label>
+
+                Student Name
+
+                <input
+                    id="studentName"
+                    value="Student"
+                    placeholder="Enter student name">
+
+            </label>
+
+
+            <label>
+
+                Level
+
+                <select id="level">
+
+                    <option value="Beginner">
+                        Beginner
+                    </option>
+
+                    <option value="Intermediate">
+                        Intermediate
+                    </option>
+
+                    <option value="Advanced">
+                        Advanced
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Teaching Language
+
+                <select id="language">
+
+                    <option value="English">
+                        English
+                    </option>
+
+                    <option value="Hindi">
+                        Hindi
+                    </option>
+
+                    <option value="Hinglish">
+                        Hinglish
+                    </option>
+
+                    <option value="Bengali">
+                        Bengali
+                    </option>
+
+                    <option value="Tamil">
+                        Tamil
+                    </option>
+
+                    <option value="Telugu">
+                        Telugu
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Teaching Style
+
+                <select id="teachingStyle">
+
+                    <option value="Simple examples">
+                        Simple Examples
+                    </option>
+
+                    <option value="Socratic questions">
+                        Socratic Questions
+                    </option>
+
+                    <option value="Visual explanation">
+                        Visual Explanation
+                    </option>
+
+                    <option value="Exam focused">
+                        Exam Focused
+                    </option>
+
+                </select>
+
+            </label>
+
+        </div>
+
+
+        <label>
+
+            Learning Objective
+
+            <textarea
+                id="objective"
+                placeholder="Example: Understand Newton's laws and solve basic problems.">
+            </textarea>
+
+        </label>
+
+
+        <button onclick="createLearner()">
+            👤 Create Learner
+        </button>
+
+        <span id="learnerStatus"
+              class="success">
+        </span>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         02. LEARNING MATERIAL
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="sectionNumber">
+            02
+        </div>
+
+        <h2>
+            📚 Upload Learning Material
+        </h2>
+
+        <p class="muted">
+
+            Upload your textbook, PDF, notes,
+            presentation or document.
+
+            The AI teacher can use this material
+            while teaching.
+
+        </p>
+
+
+        <div class="uploadBox">
+
+            <input
+                type="file"
+                id="learningFile"
+                accept=".pdf,.docx,.pptx,.txt,.md">
+
+            <button onclick="uploadMaterial()">
+                📤 Process Material
+            </button>
+
+        </div>
+
+
+        <div id="uploadStatus"
+             class="result">
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         03. PERSONALIZED LESSON
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="sectionNumber">
+            03
+        </div>
+
+        <h2>
+            🧠 Build Personalized Lesson
+        </h2>
+
+        <div class="grid">
+
+            <label>
+
+                Topic
+
+                <input
+                    id="topic"
+                    placeholder="Example: Newton's Laws">
+
+            </label>
+
+
+            <label>
+
+                Available Time
+
+                <select id="minutes">
+
+                    <option value="5">
+                        5 minutes
+                    </option>
+
+                    <option value="20"
+                            selected>
+                        20 minutes
+                    </option>
+
+                    <option value="60">
+                        60 minutes
+                    </option>
+
+                    <option value="10080">
+                        7-day learning plan
+                    </option>
+
+                </select>
+
+            </label>
+
+        </div>
+
+
+        <button onclick="generatePlan()">
+            ✨ Generate Personalized Lesson
+        </button>
+
+
+        <div id="plan"
+             class="result">
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         AI TEACHER
+    ====================================================== -->
+
+    <div class="teacherHeader">
+
+    <!-- HUMAN TEACHER VIDEO -->
+    <div class="teacherVideoContainer">
+
+        <video
+            id="teacherVideo"
+            class="teacherVideo"
+            playsinline
+            preload="metadata"
+        >
+            <source
+                src="/static/teacher.mp4"
+                type="video/mp4"
+            >
+
+            Your browser does not support video.
+        </video>
+
+        <div class="teacherLiveBadge">
+            ● LIVE AI TEACHER
+        </div>
+
+    </div>
+    <!-- AI TEACHER CONTROLS -->
+<div class="teacherControls">
+
+    <button type="button" onclick="startTeacher()">
+        ▶ Start Class
+    </button>
+
+    <button type="button" onclick="pauseTeacher()">
+        ⏸ Pause
+    </button>
+
+    <button type="button" onclick="speakLesson()">
+        🔊 Teacher Voice
+    </button>
+
+    <button type="button" onclick="nextStep()">
+        ▶ Next Step
+    </button>
+
+</div>
+
+
+    <!-- TEACHER INFORMATION -->
+    <div class="teacherInfo">
+
+        <div class="eyebrow">
+            PERSONALIZED AI CLASSROOM
+        </div>
+
+        <h2 id="conceptTitle">
+            Your AI Teacher is Ready
+        </h2>
+
+        <p
+            id="progressText"
+            class="muted"
+        >
+            Generate a lesson to begin.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+        <!-- =================================================
+             REALISTIC TEACHER VIDEO AREA
+        ================================================== -->
+
+        <div class="teacherVideoStage">
+
+
+            <!-- VIDEO -->
+
+            <video
+                id="teacherVideo"
+                class="teacherVideo"
+                playsinline
+                preload="metadata">
+
+                <!--
+
+                Put your teacher video here:
+
+                static/teacher.mp4
+
+                -->
+
+                <source
+                    src="{{ url_for('static', filename='teacher.mp4') }}"
+                    type="video/mp4">
+
+                Your browser does not support video.
+
+            </video>
+
+
+
+            <!-- VIDEO FALLBACK -->
+
+            <div id="teacherFallback"
+                 class="teacherFallback">
+
+                <div class="aiTeacherAvatar">
+
+                    <div class="avatarGlow">
+
+                        <div class="humanFace">
+
+                            <div class="humanEye leftEye"></div>
+
+                            <div class="humanEye rightEye"></div>
+
+                            <div class="humanNose"></div>
+
+                            <div class="humanMouth"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="teacherName">
+                    AI Teacher
+                </div>
+
+                <div class="teacherRole">
+                    Personalized Virtual Educator
+                </div>
+
+            </div>
+
+
+
+            <!-- LIVE INDICATOR -->
+
+            <div class="liveIndicator">
+
+                <span class="liveDot"></span>
+
+                LIVE AI TEACHER
+
+            </div>
+
+
+
+            <!-- SPEAKING INDICATOR -->
+
+            <div id="speakingIndicator"
+                 class="speakingIndicator hidden">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                Speaking...
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TEACHER CONTROL BAR -->
+
+        <div class="teacherControls">
+
+            <button
+                id="playTeacherButton"
+                onclick="playTeacherVideo()">
+
+                ▶ Start Class
+
+            </button>
+
+
+            <button onclick="pauseTeacherVideo()">
+
+                ⏸ Pause
+
+            </button>
+
+
+            <button onclick="speakLesson()">
+
+                🔊 Teacher Voice
+
+            </button>
+
+
+            <button onclick="nextStep()">
+
+                ▶ Next Step
+
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
+             LESSON TEXT
+        ================================================== -->
+
+        <div class="lessonInfo">
+
+            <div class="lessonLabel">
+
+                👨‍🏫 TEACHER EXPLANATION
+
+            </div>
+
+
+            <div
+                id="lessonText"
+                class="lessonText">
+
+                Welcome!
+
+                Create a learner profile
+                and generate a lesson.
+
+                Your AI teacher will explain
+                the topic step-by-step.
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             VISUAL EXPLANATION
+        ================================================== -->
+
+        <div id="visualBox"
+             class="visualBox">
+
+            <div class="visualTitle">
+
+                🎨 Subject-Aware Visual
+
+            </div>
+
+            <p>
+
+                The AI teacher can suggest:
+
+                diagrams,
+                formulas,
+                examples,
+                graphs,
+                step-by-step solutions
+                and visual explanations.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             KNOWLEDGE CHECK
+        ================================================== -->
+
+        <div id="questionPanel"
+             class="questionPanel hidden">
+
+            <div class="eyebrow">
+                KNOWLEDGE CHECK
+            </div>
+
+            <h3>
+                🧑‍🏫 Teacher Question
+            </h3>
+
+
+            <div
+                id="questionText"
+                class="questionText">
+            </div>
+
+
+            <textarea
+                id="studentAnswer"
+                placeholder="Explain your answer in your own words...">
+            </textarea>
+
+
+            <button onclick="evaluateAnswer()">
+
+                ✅ Evaluate My Answer
+
+            </button>
+
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         AI CLASSROOM FEATURES
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="sectionNumber">
+            AI FEATURES
+        </div>
+
+        <h2>
+            🚀 Intelligent Teaching System
+        </h2>
+
+
+        <div class="featureGrid">
+
+
+            <div class="featureCard">
+
+                <div class="featureIcon">
+                    🧠
+                </div>
+
+                <h3>
+                    Adaptive Teaching
+                </h3>
+
+                <p>
+                    Changes explanation difficulty
+                    according to learner level.
+                </p>
+
+            </div>
+
+
+
+            <div class="featureCard">
+
+                <div class="featureIcon">
+                    👁️
+                </div>
+
+                <h3>
+                    Visual Learning
+                </h3>
+
+                <p>
+                    Uses diagrams, examples,
+                    formulas and visual explanations.
+                </p>
+
+            </div>
+
+
+
+            <div class="featureCard">
+
+                <div class="featureIcon">
+                    🔊
+                </div>
+
+                <h3>
+                    AI Voice
+                </h3>
+
+                <p>
+                    Reads the explanation using
+                    the browser's speech system.
+                </p>
+
+            </div>
+
+
+
+            <div class="featureCard">
+
+                <div class="featureIcon">
+                    🎯
+                </div>
+
+                <h3>
+                    Continuous Assessment
+                </h3>
+
+                <p>
+                    Checks understanding and
+                    identifies learning gaps.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         04. FINAL ASSESSMENT
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="sectionNumber">
+            04
+        </div>
+
+        <h2>
+            📝 Final Assessment
+        </h2>
+
+        <p class="muted">
+
+            The AI teacher checks your understanding
+            after the lesson.
+
+        </p>
+
+
+        <button onclick="generateAssessment()">
+
+            📝 Generate Assessment
+
+        </button>
+
+
+        <div
+            id="assessment"
+            class="result">
+        </div>
+
+
+        <button
+            id="finishAssessmentButton"
+            class="hidden"
+            onclick="finishAssessment()">
+
+            🏁 Finish Assessment
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         05. LEARNING REPORT
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="sectionNumber">
+            05
+        </div>
+
+        <h2>
+            📊 Learning Report
+        </h2>
+
+
+        <div class="reportGrid">
+
+
+            <div class="reportItem">
+
+                <small>
+                    SCORE
+                </small>
+
+                <strong id="score">
+                    —
+                </strong>
+
+            </div>
+
+
+
+            <div class="reportItem">
+
+                <small>
+                    STRONG AREAS
+                </small>
+
+                <strong id="strongAreas">
+                    —
+                </strong>
+
+            </div>
+
+
+
+            <div class="reportItem">
+
+                <small>
+                    NEEDS IMPROVEMENT
+                </small>
+
+                <strong id="weakAreas">
+                    —
+                </strong>
+
+            </div>
+
+
+
+            <div class="reportItem">
+
+                <small>
+                    NEXT STEP
+                </small>
+
+                <strong id="nextStep">
+                    —
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+        <button onclick="loadHistory()">
+
+            📚 View Learning History
+
+        </button>
+
+
+        <pre id="history"></pre>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div>
+            🤖 AI Teacher Studio
+        </div>
+
+        <div>
+            Personalized • Adaptive • Interactive
+        </div>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script
+    src="{{ url_for('static', filename='app.js') }}">
+</script>
+
+
+
+<!-- =====================================================
+     TEACHER VIDEO SCRIPT
+====================================================== -->
+
+<script>
+
+    const teacherVideo =
+        document.getElementById("teacherVideo");
+
+    const teacherFallback =
+        document.getElementById("teacherFallback");
+
+    const speakingIndicator =
+        document.getElementById("speakingIndicator");
+
+
+    /*
+     * When teacher video exists,
+     * show the video.
+     */
+
+    teacherVideo.addEventListener(
+        "loadeddata",
+        function () {
+
+            teacherFallback.style.display = "none";
+
+            teacherVideo.style.display = "block";
+
+        }
+    );
+
+
+    /*
+     * If video cannot be loaded,
+     * show animated AI teacher.
+     */
+
+    teacherVideo.addEventListener(
+        "error",
+        function () {
+
+            teacherVideo.style.display = "none";
+
+            teacherFallback.style.display = "flex";
+
+        }
+    );
+
+
+    /*
+     * Start teacher video
+     */
+
+    function playTeacherVideo() {
+
+        if (teacherVideo.readyState >= 2) {
+
+            teacherVideo.play();
+
+        }
+
+        startSpeakingAnimation();
+
+    }
+
+
+    /*
+     * Pause teacher video
+     */
+
+    function pauseTeacherVideo() {
+
+        teacherVideo.pause();
+
+        stopSpeakingAnimation();
+
+        window.speechSynthesis.cancel();
+
+    }
+
+
+    /*
+     * Speaking animation
+     */
+
+    function startSpeakingAnimation() {
+
+        speakingIndicator.classList.remove(
+            "hidden"
+        );
+
+        document
+            .getElementById("avatar")
+            ?.classList.add("speaking");
+
+    }
+
+
+    /*
+     * Stop speaking animation
+     */
+
+    function stopSpeakingAnimation() {
+
+        speakingIndicator.classList.add(
+            "hidden"
+        );
+
+        document
+            .getElementById("avatar")
+            ?.classList.remove("speaking");
+
+    }
+
+
+    /*
+     * AI Teacher Browser Voice
+     */
+
+    function speakLesson() {
+
+        const lessonElement =
+            document.getElementById("lessonText");
+
+        if (!lessonElement) {
+            return;
+        }
+
+
+        const text =
+            lessonElement.innerText.trim();
+
+
+        if (!text) {
+            return;
+        }
+
+
+        window.speechSynthesis.cancel();
+
+
+        const speech =
+            new SpeechSynthesisUtterance(text);
+
+
+        const language =
+            document.getElementById("language")
+                ?.value || "English";
+
+
+        if (language === "Hindi") {
+
+            speech.lang = "hi-IN";
+
+        }
+
+        else if (language === "Bengali") {
+
+            speech.lang = "bn-IN";
+
+        }
+
+        else if (language === "Tamil") {
+
+            speech.lang = "ta-IN";
+
+        }
+
+        else if (language === "Telugu") {
+
+            speech.lang = "te-IN";
+
+        }
+
+        else {
+
+            speech.lang = "en-IN";
+
+        }
+
+
+        speech.rate = 0.9;
+
+        speech.pitch = 1.0;
+
+        speech.volume = 1.0;
+
+
+        speech.onstart = function () {
+
+            startSpeakingAnimation();
+
+        };
+
+
+        speech.onend = function () {
+
+            stopSpeakingAnimation();
+
+        };
+
+
+        speech.onerror = function () {
+
+            stopSpeakingAnimation();
+
+        };
+
+
+        window.speechSynthesis.speak(speech);
+
+    }
+
+
+</script>
+<script src="/static/app.js"></script>
+<script src="/static/teacher_ai.js"></script>
+
+</body>
+
+</html>
